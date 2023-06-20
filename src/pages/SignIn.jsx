@@ -1,16 +1,46 @@
 import React, { useState } from "react";
 import apiService from "../services/apiService";
 import { useStore } from "../services/store";
+import { useNavigate } from "react-router-dom";
+import localStorageService from "../services/localStorageService";
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const setToken = useStore(state=>state.setToken)
+
+  const navigate = useNavigate();
+
+  const setToken = useStore((state) => state.setToken);
+  const setUserStore = useStore((state) => state.setUsername);
 
   function login() {
-    apiService.login({ username, password }).then(resp=>setToken(resp.data.token));
+    apiService
+      .login({ username, password })
+      .then((resp) => {
+        setToken(resp.data.token);
+        setUserStore(resp.data.username);
+        localStorageService.saveData({
+          username: resp.data.username,
+          token: resp.data.token,
+        });
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
   }
-  function Register() {}
+  function register() {
+    apiService
+      .register({ username, password })
+      .then((resp) => {
+        setToken(resp.data.token);
+        setUserStore(resp.data.username);
+        localStorageService.saveData({
+          username: resp.data.username,
+          token: resp.data.token,
+        });
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
+  }
 
   return (
     <div class="bg-white py-6 sm:py-8 lg:py-12">
@@ -52,15 +82,21 @@ export default function SignIn() {
               />
             </div>
 
-            <button class="block rounded-lg bg-gray-800 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-700 focus-visible:ring active:bg-gray-600 md:text-base"
-            onClick={() => {	
-                login()
-             }}
+            <button
+              class="block rounded-lg bg-gray-800 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-700 focus-visible:ring active:bg-gray-600 md:text-base"
+              onClick={() => {
+                login();
+              }}
             >
               Log in
             </button>
             <hr />
-            <button class="block rounded-lg bg-gray-800 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-700 focus-visible:ring active:bg-gray-600 md:text-base">
+            <button
+              onClick={() => {
+                register();
+              }}
+              class="block rounded-lg bg-gray-800 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-700 focus-visible:ring active:bg-gray-600 md:text-base"
+            >
               Register
             </button>
           </div>
