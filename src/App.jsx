@@ -10,6 +10,7 @@ import { useStore } from "./services/store";
 import SignIn from "./pages/SignIn";
 import localStorageService from "./services/localStorageService";
 import GamePage from "./pages/GamePage";
+import USerPage from "./pages/USerPage";
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/" element={<Games />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/game/:slug" element={<GamePage />} />
+          <Route path="/user/:username" element={<USerPage />} />
         </Routes>
       </div>
     </div>

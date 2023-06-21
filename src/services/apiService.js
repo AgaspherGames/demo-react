@@ -26,10 +26,19 @@ function signout(token) {
 function fetchGame(slug) {
   return instance.get("/games/" + slug);
 }
+function fetchGameScores(slug) {
+  return instance.get("/games/" + slug+'/scores');
+}
+
+function fetchUser(username) {
+  return instance.get("/users/" + username);
+}
 
 export default {
   fetchGames,
   fetchGame,
+  fetchGameScores,
+  fetchUser,
   login,
   signout,
   register,
